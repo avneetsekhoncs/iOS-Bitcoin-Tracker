@@ -9,5 +9,5 @@
 import Foundation
 
 struct KeyManager {
-    let coinAPI = "test"
+    let coinAPI = "tes11t"
 }
