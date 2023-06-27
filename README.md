@@ -9,7 +9,7 @@ This app will give you the latest Bitcoin prices in all the popular currencies. 
 * Learn to use URLSession to network and make HTTP requests.
 * Parse JSON with the native Encodable and Decodable protocols.
 
-![image](https://github.com/avneetsekhoncs/iOS-Bitcoin-Tracker/assets/47070969/bc431387-5420-4059-a6c9-97e8b013f3e1)
+![](https://github.com/avneetsekhoncs/iOS-Bitcoin-Tracker/blob/main/Bitcoin%20Demo.gif)
 
 
 >This is a companion project to The App Brewery's Complete App Development Bootcamp, check out the full course at [www.appbrewery.co](https://www.appbrewery.co/)
