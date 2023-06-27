@@ -18,7 +18,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        CoinManager().getApiKey()
         
         bitcoinPicker.dataSource = self //ViewController is the datasource for the picker
         bitcoinPicker.delegate = self
