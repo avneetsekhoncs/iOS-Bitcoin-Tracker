@@ -15,24 +15,29 @@ protocol CoinManagerDelegate {
 
 struct CoinManager {
     
-    var delegate: CoinManagerDelegate?  //"delegate" will implment the CoinManagerDelegate methods
+    //"delegate" will implment the CoinManagerDelegate methods
+    var delegate: CoinManagerDelegate?
     
     let baseURL = "https://rest.coinapi.io/v1/exchangerate/BTC"
     let apiKey = "B774914E-1175-4916-83C1-B499CE804D4D"
     
     let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
-
+    
+    //Constructs the API URL
     func getCoinPrice(for currency: String) {
         let urlString = "\(baseURL)/\(currency)?apikey=\(apiKey)"
         performRequest(with: urlString, currency: currency)
     }
     
-    //Perform networking to get live data
+    //Perform networking to get live data. "with" is an external paramter.
     func performRequest(with urlString: String, currency: String) {
+        
         //Create a URL
         if let url = URL(string: urlString){
+            
             //Create a URLSession
             let session = URLSession(configuration: .default)
+            
             //Give session a task
             let task = session.dataTask(with: url) { data, response, error in
                 if error != nil {
@@ -43,8 +48,6 @@ struct CoinManager {
                 if let readData = data {
                     if let coinPrice = self.parseJSON(readData) {
                         let priceString = String(format: "%.2f", coinPrice)
-                        print(priceString)
-                        print(currency)
                         self.delegate?.didUpdatePrice(self, price: priceString, currency: currency)
                     }
                     
