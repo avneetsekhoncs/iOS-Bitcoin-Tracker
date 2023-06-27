@@ -8,7 +8,14 @@
 
 import Foundation
 
+protocol CoinManagerDelegate {
+    func didUpdatePrice(_ coinManager: CoinManager, price: String, currency: String)
+    func didFailWithError(error: Error)
+}
+
 struct CoinManager {
+    
+    var delegate: CoinManagerDelegate?  //"delegate" will implment the CoinManagerDelegate methods
     
     let baseURL = "https://rest.coinapi.io/v1/exchangerate/BTC"
     let apiKey = "B774914E-1175-4916-83C1-B499CE804D4D"
@@ -17,11 +24,11 @@ struct CoinManager {
 
     func getCoinPrice(for currency: String) {
         let urlString = "\(baseURL)/\(currency)?apikey=\(apiKey)"
-        performRequest(with: urlString)
+        performRequest(with: urlString, currency: currency)
     }
     
     //Perform networking to get live data
-    func performRequest(with urlString: String) {
+    func performRequest(with urlString: String, currency: String) {
         //Create a URL
         if let url = URL(string: urlString){
             //Create a URLSession
@@ -29,12 +36,18 @@ struct CoinManager {
             //Give session a task
             let task = session.dataTask(with: url) { data, response, error in
                 if error != nil {
+                    self.delegate?.didFailWithError(error: error!)
                     return
                 }
                 
                 if let readData = data {
-                    let coinPrice = self.parseJSON(readData)
-                    print(coinPrice)
+                    if let coinPrice = self.parseJSON(readData) {
+                        let priceString = String(format: "%.2f", coinPrice)
+                        print(priceString)
+                        print(currency)
+                        self.delegate?.didUpdatePrice(self, price: priceString, currency: currency)
+                    }
+                    
                 }
             }
             
@@ -52,7 +65,7 @@ struct CoinManager {
             
             return lastPrice
         } catch {
-            print(error)
+            delegate?.didFailWithError(error: error)
             return nil
         }
     }
